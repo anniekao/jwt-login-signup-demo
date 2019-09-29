@@ -12,7 +12,7 @@ export default function SignupScreen({navigation}) {
   let [token, setToken] = useState("no token yet");
   let [email, setEmail] = useState("Email");
   let [password, setPassword] = useState("Password");
-  let [password_confirm, setPasswordConfirm] = useState(
+  let [password_confirmation, setPasswordConfirmation] = useState(
     "Password Confirmation"
   );
   let [user, setUsername] = useState("");
@@ -20,19 +20,21 @@ export default function SignupScreen({navigation}) {
   let [errorMessage, setErrorMessage] = useState("");
 
   _handleSignup = () => {
-    console.log("=======handle login", name, email, password, password_confirm);
-    if (password === password_confirm) {
-      fetch("http://08547ccb.ngrok.io/users/", {
+    console.log("=======handle signup", name, email, password, password_confirmation);
+    if (password === password_confirmation) {
+      fetch("http://82657283.ngrok.io/users", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          name,
-          email,
-          password,
-          password_confirm
+          user: {
+            name,
+            email,
+            password,
+            password_confirmation
+          }
         })
       })
         .then(res => res.json())
@@ -76,8 +78,8 @@ export default function SignupScreen({navigation}) {
       <TextInput value={email} onChangeText={text => setEmail(text)} />
       <TextInput value={password} onChangeText={text => setPassword(text)} />
       <TextInput
-        value={password_confirm}
-        onChangeText={text => setPasswordConfirm(text)}
+        value={password_confirmation}
+        onChangeText={text => setPasswordConfirmation(text)}
       />
       {errorMessage ? <Text>{errorMessage}</Text> : <Text />}
       <Button title="Create an account" onPress={() => _handleSignup()} />
@@ -85,7 +87,7 @@ export default function SignupScreen({navigation}) {
 
       <Button
         title="Login"
-        onPress={() => navigation.navigate("Log")}
+        onPress={() => navigation.navigate("Login")}
       />
 
       <Text>{token}</Text>

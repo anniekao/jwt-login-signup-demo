@@ -15,7 +15,7 @@ export default function LoginScreen({navigation}) {
   let [user, setUsername] = useState("");
 
   _handleLogin = () => {
-    fetch("http://08547ccb.ngrok.io/auth/login", {
+    fetch("http://82657283.ngrok.io/auth/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -57,19 +57,28 @@ export default function LoginScreen({navigation}) {
     }
   };
 
+  _handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("username");
+    } catch(err) {
+      console.error(err)
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TextInput value={email} onChangeText={text => setEmail(text)} />
       <TextInput value={password} onChangeText={text => setPassword(text)} />
       <Button title="Login" onPress={() => _handleLogin()} />
       <Button title="Fetch Info" onPress={() => _fetchToken()} />
+      <Button title="Logout" onPress={() => _handleLogout()} />
 
       <Button
         title="Create an account"
         onPress={() => navigation.navigate("SignUp")}
       />
-      <Text>{token}</Text>
-      <Text>{user}</Text>
+     {token && (<Text>{token}</Text>)}
     </View>
   );
 }
