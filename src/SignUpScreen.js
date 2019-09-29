@@ -3,10 +3,9 @@ import {
   AsyncStorage,
   StyleSheet,
   Text,
-  View,
-  TextInput,
-  Button
+  View
 } from "react-native";
+import { Content, Item, Input, Button } from "native-base";
 
 export default function SignupScreen({navigation}) {
   let [token, setToken] = useState("no token yet");
@@ -74,24 +73,35 @@ export default function SignupScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <TextInput value={name} onChangeText={text => setName(text)} />
-      <TextInput value={email} onChangeText={text => setEmail(text)} />
-      <TextInput value={password} onChangeText={text => setPassword(text)} />
-      <TextInput
-        value={password_confirmation}
-        onChangeText={text => setPasswordConfirmation(text)}
-      />
-      {errorMessage ? <Text>{errorMessage}</Text> : <Text />}
-      <Button title="Create an account" onPress={() => _handleSignup()} />
-      <Button title="Fetch Info" onPress={() => _fetchToken()} />
-
-      <Button
-        title="Login"
-        onPress={() => navigation.navigate("Login")}
-      />
-
-      <Text>{token}</Text>
-      <Text>{user}</Text>
+      <Content style={{ marginTop: 100, width: "100%" }}>
+        <Item rounded>
+          <Input placeholder="name" onChangeText={text => setName(text)} />
+        </Item>
+        <Item rounded>
+          <Input placeholder="Email" onChangeText={text => setEmail(text)} />
+        </Item>
+        <Item rounded>
+          <Input
+            placeholder="Password"
+            onChangeText={text => setPassword(text)}
+            secureTextEntry={true}
+          />
+        </Item>
+        <Item rounded>
+          <Input
+            placeholder="Password Confirmation"
+            onChangeText={text => setPasswordConfirmation(text)}
+            secureTextEntry={true}
+          />
+        </Item>
+        {errorMessage ? <Text>{errorMessage}</Text> : <Text />}
+        <Button onPress={() => _handleSignup()} block light>
+          <Text>Create An Account</Text>
+        </Button>
+        <Button onPress={() => navigation.navigate("Login")} block light>
+          <Text>Login</Text>
+        </Button>
+      </Content>
     </View>
   );
 }

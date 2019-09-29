@@ -3,18 +3,23 @@ import {
   AsyncStorage,
   StyleSheet,
   Text,
-  View,
-  TextInput,
-  Button
+  View
 } from "react-native";
+import {
+  Content,
+  Item,
+  Input,
+  Button
+} from "native-base";
 
 export default function LoginScreen({navigation}) {
   let [token, setToken] = useState("no token yet");
   let [email, setEmail] = useState("Email");
   let [password, setPassword] = useState("Password");
-  let [user, setUsername] = useState("");
+  let [username, setUsername] = useState("");
 
   _handleLogin = () => {
+    console.log("========handle login =====> ", email, password);
     fetch("http://82657283.ngrok.io/auth/login", {
       method: "POST",
       headers: {
@@ -30,6 +35,9 @@ export default function LoginScreen({navigation}) {
       .then(data => {
         _storeToken(data);
       })
+      .then(
+        navigation.navigate('App')
+      )
       .catch(err => console.error(err));
   };
 
@@ -61,24 +69,41 @@ export default function LoginScreen({navigation}) {
     try {
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("username");
+      setToken('');
+      setUsername('');
     } catch(err) {
-      console.error(err)
+      console.error(err);
     }
   };
 
   return (
     <View style={styles.container}>
-      <TextInput value={email} onChangeText={text => setEmail(text)} />
-      <TextInput value={password} onChangeText={text => setPassword(text)} />
-      <Button title="Login" onPress={() => _handleLogin()} />
-      <Button title="Fetch Info" onPress={() => _fetchToken()} />
-      <Button title="Logout" onPress={() => _handleLogout()} />
-
-      <Button
-        title="Create an account"
-        onPress={() => navigation.navigate("SignUp")}
-      />
-     {token && (<Text>{token}</Text>)}
+      <Content style={{ marginTop: 100, width: "100%" }}>
+        <Item rounded>
+          <Input placeholder="Email" onChangeText={text => setEmail(text)} />
+        </Item>
+        <Item rounded>
+          <Input
+            placeholder="Password"
+            onChangeText={text => setPassword(text)}
+            secureTextEntry={true}
+          />
+        </Item>
+        <Button onPress={() => _handleLogin()} block light>
+          <Text>Login</Text>
+        </Button>
+        <Button onPress={() => _fetchToken()} block light>
+          <Text>Fetch Info</Text>
+        </Button>
+        <Button onPress={() => _handleLogout()} block light>
+          <Text>Logout</Text>
+        </Button>
+        <Button onPress={() => navigation.navigate("SignUp")} light>
+          <Text>Create Account</Text>
+        </Button>
+        <Text>{token}</Text>
+        <Text>{username}</Text>
+      </Content>
     </View>
   );
 }
